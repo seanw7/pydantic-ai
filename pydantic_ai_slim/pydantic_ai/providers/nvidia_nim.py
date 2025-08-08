@@ -92,4 +92,6 @@ class NvidiaNIMProvider(Provider[AsyncOpenAI]):
             if http_client is None:
                 http_client = cached_async_http_client(provider='nvidia')
 
-            self._client = AsyncOpenAI(base_url=resolved_base_url, api_key=resolved_api_key, http_client=http_client)
+            self._client = AsyncOpenAI(
+                base_url=resolved_base_url, api_key=resolved_api_key, http_client=http_client, timeout=30.0
+            )
