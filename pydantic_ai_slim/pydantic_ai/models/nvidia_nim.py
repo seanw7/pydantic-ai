@@ -131,11 +131,18 @@ class NvidiaNIMModel(Model):
         model_settings: ModelSettings | None,
         model_request_parameters: ModelRequestParameters,
     ) -> ModelResponse:
+        print('✅ [1] Reached NvidiaNIMModel.request()')  # ADD THIS LINE
         check_allow_model_requests()
+        print('✅ [2] Reached response = await self._completions_create')  # ADD THIS LINE
+
         response = await self._completions_create(
             messages, False, cast(NvidiaNIMModelSettings, model_settings or {}), model_request_parameters
         )
+        print('✅ [3] Reached response')  # ADD THIS LINE
+
         model_response = self._process_response(response)
+        print('✅ [3] Processed response')  # ADD THIS LINE
+
         model_response.usage.requests = 1
         return model_response
 
@@ -147,15 +154,21 @@ class NvidiaNIMModel(Model):
         model_request_parameters: ModelRequestParameters,
         run_context: RunContext[Any] | None = None,
     ) -> AsyncIterator[StreamedResponse]:
+        print('✅ [1] Reached NvidiaNIMModel.request_stream()')  # ADD THIS LINE
         check_allow_model_requests()
+        print('✅ [2] Reached response = await self._completions_create')  # ADD THIS LINE
+
         response = await self._completions_create(
             messages,
             True,
             cast(NvidiaNIMModelSettings, model_settings or {}),
             model_request_parameters,
         )
+        print('✅ [3] Reached response')  # ADD THIS LINE
+
         async with response:
             yield await self._process_streamed_response(response, model_request_parameters)
+        print('✅ [4] Reached response yield')  # ADD THIS LINE
 
     @property
     def model_name(self) -> NvidiaNIMModelName:
